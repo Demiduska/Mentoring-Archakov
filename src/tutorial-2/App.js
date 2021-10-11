@@ -25,6 +25,7 @@ function App() {
   return (
     <form className="form" onSubmit={handleSubmit}>
       <input
+        required
         type="text"
         className="input"
         placeholder="Email"
@@ -32,6 +33,7 @@ function App() {
         onChange={onChangeInput}
       />
       <input
+        required
         type="password"
         className="input"
         placeholder="Пароль"
