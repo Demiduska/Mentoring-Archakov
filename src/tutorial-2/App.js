@@ -3,9 +3,10 @@ import "./App.css";
 function App() {
   let login = "";
   let password = "";
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (login !== "" && password !== "") {
+    if (login.trim() && password) {
       console.log({ login, password });
       login = "";
       password = "";
@@ -14,6 +15,7 @@ function App() {
       alert("Заполните одно из полей!");
     }
   };
+
   const onChangeInput = (event) => {
     if (event.target.name === "login") {
       login = event.target.value;
@@ -22,6 +24,7 @@ function App() {
       password = event.target.value;
     }
   };
+
   return (
     <form className="form" onSubmit={handleSubmit}>
       <input
