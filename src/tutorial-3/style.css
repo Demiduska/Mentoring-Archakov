@@ -1,0 +1,8 @@
+.list__item{
+
+}
+.list__item-delete{
+    color: red;
+    margin-left: 10px;
+    cursor: pointer;
+}
