@@ -72,7 +72,7 @@ function App() {
     let newArr = comments.filter((comment, i) => i !== index);
     setComments(newArr);
   };
-  console.log(comments);
+
   return (
     <Box
       display="flex"
