@@ -70,7 +70,7 @@ function App() {
 
   const removeComment = (index) => {
     let newArr = comments.filter((comment, i) => i !== index);
-    setComments([...newArr]);
+    setComments(newArr);
   };
   console.log(comments);
   return (
