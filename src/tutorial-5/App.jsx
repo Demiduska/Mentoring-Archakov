@@ -3,7 +3,6 @@ import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
 import { Box, Button, TextField } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import { useEffect, useState } from "react";
 import Comment from "./components/Comment";
 
 const useStyles = makeStyles((theme) => ({
@@ -32,41 +31,39 @@ const options = {
   second: "numeric",
 };
 
-let comment = {
-  fullName: "",
-  email: "",
-  text: "",
-  createdAt: new Date().toLocaleDateString("en", options),
-};
-
 function App() {
   const classes = useStyles();
+  const [comments, setComments] = React.useState([]);
+  const commentRef = React.useRef({
+    fullName: "",
+    email: "",
+    text: "",
+    createdAt: new Date().toLocaleDateString("en", options),
+  });
 
-  const [comments, setComments] = useState([]);
-
-  useEffect(() => {
+  React.useEffect(() => {
     let initialComments = JSON.parse(localStorage.getItem("comments"));
     if (initialComments) {
       setComments([...initialComments]);
     }
   }, []);
 
-  useEffect(() => {
-    if (comments.length) {
+  React.useEffect(() => {
+    if (comments) {
       localStorage.setItem("comments", JSON.stringify(comments));
     }
   }, [comments]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    setComments([...comments, comment]);
+    setComments([...comments, commentRef.current]);
     event.target.reset();
   };
 
   const handleOnChangeInput = (event) => {
     let { name, value } = event.target;
-    comment = {
-      ...comment,
+    commentRef.current = {
+      ...commentRef.current,
       [name]: value,
     };
   };
@@ -75,7 +72,7 @@ function App() {
     let newArr = comments.filter((comment, i) => i !== index);
     setComments([...newArr]);
   };
-
+  console.log(comments);
   return (
     <Box
       display="flex"
