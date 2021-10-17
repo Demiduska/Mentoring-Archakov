@@ -1,170 +1,90 @@
-import * as React from "react";
-import List from "@mui/material/List";
-import Typography from "@mui/material/Typography";
-import { Box, Button, TextField } from "@mui/material";
-import { makeStyles } from "@mui/styles";
-import Comment from "./components/Comment";
-
-const useStyles = makeStyles((theme) => ({
-  lightGray: {
-    backgroundColor: "#FBFBFB",
-  },
-  customBorder: {
-    borderRadius: 5,
-    border: `1px solid #e7e7e7`,
-  },
-  input: {
-    width: "100%",
-  },
-  inputWrap: {
-    marginBottom: "20px",
-  },
-}));
-
-const options = {
-  year: "numeric",
-  month: "short",
-  day: "numeric",
-  weekday: "short",
-  hour: "numeric",
-  minute: "numeric",
-  second: "numeric",
-};
+import { Nav, Navbar, Row, Col, Card } from "react-bootstrap";
+import "./App.css";
+import Article from "./components/Article";
 
 function App() {
-  const classes = useStyles();
-  const [comments, setComments] = React.useState([]);
-  const commentRef = React.useRef({
-    fullName: "",
-    email: "",
-    text: "",
-    createdAt: new Date().toLocaleDateString("en", options),
-  });
-
-  React.useEffect(() => {
-    let initialComments = JSON.parse(localStorage.getItem("comments"));
-    if (initialComments) {
-      setComments([...initialComments]);
-    }
-  }, []);
-
-  React.useEffect(() => {
-    if (comments) {
-      localStorage.setItem("comments", JSON.stringify(comments));
-    }
-  }, [comments]);
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    setComments([...comments, commentRef.current]);
-    event.target.reset();
-  };
-
-  const handleOnChangeInput = (event) => {
-    let { name, value } = event.target;
-    commentRef.current = {
-      ...commentRef.current,
-      [name]: value,
-    };
-  };
-
-  const removeComment = (index) => {
-    let newArr = comments.filter((comment, i) => i !== index);
-    setComments(newArr);
-  };
+  const { pathname } = window.location;
+  let id;
+  let result = /post\/(\d+)/.exec(pathname);
+  if (result) {
+    id = result[1];
+  }
 
   return (
-    <Box
-      display="flex"
-      alignItems="center"
-      flexWrap="wrap"
-      flexDirection="column"
-      p={1}
-      className={classes.lightGray}
-    >
-      <List
-        className={classes.customBorder}
-        sx={{
-          width: "400px",
-          bgcolor: "background.paper",
-          justifyContent: "center",
-        }}
-      >
-        {!comments.length ? (
-          "Пока пусто:("
-        ) : (
-          <div>
-            {comments.map((comment, index) => (
-              <Comment
-                key={index}
-                comment={comment}
-                index={index}
-                removeComment={removeComment}
+    <div className="App">
+      <header>
+        <h2>
+          <a href="/">React Blog</a>
+        </h2>
+        <Nav variant="pills" defaultActiveKey="/" as="ul">
+          <Nav.Item as="li">
+            <Nav.Link href="/" eventKey="/home" to="/">
+              Главная
+            </Nav.Link>
+          </Nav.Item>
+          <Nav.Item as="li">
+            <Nav.Link href="/about" eventKey="/about" to="/about">
+              Обо мне
+            </Nav.Link>
+          </Nav.Item>
+          <Nav.Item as="li">
+            <Nav.Link href="/profile" eventKey="/profile" to="/profile">
+              Профиль
+            </Nav.Link>
+          </Nav.Item>
+        </Nav>
+      </header>
+      {pathname === "/" && (
+        <Row>
+          <Col xs={6}>
+            <Card>
+              <Card.Img
+                variant="top"
+                src="https://via.placeholder.com/150x150"
               />
-            ))}
-          </div>
-        )}
-      </List>
-      <form onSubmit={handleSubmit}>
-        <Box
-          className={classes.customBorder}
-          p={2}
-          sx={{
-            width: "400px",
-            bgcolor: "background.paper",
-            justifyContent: "center",
-            marginTop: "20px",
-            boxSizing: "border-box",
-          }}
-        >
-          <Typography variant="h5" gutterBottom component="h4">
-            Обратная связь
-          </Typography>
-          <Box className={classes.inputWrap}>
-            <TextField
-              className={classes.input}
-              label="Имя"
-              type="text"
-              name="fullName"
-              required
-              helperText="Incorrect entry."
-              onChange={handleOnChangeInput}
-            />
-          </Box>
-          <Box className={classes.inputWrap}>
-            <TextField
-              className={classes.input}
-              label="Почта"
-              type="email"
-              name="email"
-              required
-              onChange={handleOnChangeInput}
-            />
-          </Box>
-          <Box className={classes.inputWrap}>
-            <TextField
-              className={classes.input}
-              label="Текст"
-              multiline
-              rows={4}
-              required
-              name="text"
-              onChange={handleOnChangeInput}
-            />
-          </Box>
-          <Button
-            sx={{
-              width: "100%",
-            }}
-            variant="contained"
-            color="primary"
-            type="submit"
-          >
-            Отправить
-          </Button>
-        </Box>
-      </form>
-    </Box>
+              <Card.Body>
+                <Card.Title>
+                  <a href="/post/1">Card title 1</a>
+                </Card.Title>
+                <Card.Text>
+                  This is a longer card with supporting text below as a natural
+                  lead-in to additional content. This content is a little bit
+                  longer.
+                </Card.Text>
+              </Card.Body>
+            </Card>
+          </Col>
+          <Col xs={6}>
+            <Card>
+              <Card.Img
+                variant="top"
+                src="https://via.placeholder.com/150x150"
+              />
+              <Card.Body>
+                <Card.Title>
+                  <a href="/post/2">Card title 2</a>
+                </Card.Title>
+                <Card.Text>
+                  This is a longer card with supporting text below as a natural
+                  lead-in to additional content. This content is a little bit
+                  longer.
+                </Card.Text>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      )}
+      {pathname === `/post/${id}` && <Article id={id} />}
+      {pathname === "/about" && (
+        <Card>
+          <Card.Body>Это мой личный сайт!</Card.Body>
+        </Card>
+      )}
+      <br />
+      <Navbar bg="light" style={{ paddingLeft: 20 }}>
+        <Navbar.Brand href="#home">My site (c) 2021</Navbar.Brand>
+      </Navbar>
+    </div>
   );
 }
 
