@@ -4,11 +4,11 @@ import Article from "./components/Article";
 
 function App() {
   const { pathname } = window.location;
-  let id;
-  let result = /post\/(\d+)/.exec(pathname);
-  if (result) {
-    id = result[1];
-  }
+  const getPostId = () => {
+    let result = /post\/(\d+)/.exec(pathname);
+    return result ? result[1] : 0;
+  };
+  const id = getPostId();
 
   return (
     <div className="App">
